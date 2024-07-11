@@ -6,7 +6,7 @@ export default function OpcoesHeader() {
     return (
         <ul className='opcoes'>
             {textoOpcoes.map((texto) => (
-                <li><p>{texto}</p></li>
+                <li><a href='#'>{texto}</a></li>
             ))}
         </ul>
     )

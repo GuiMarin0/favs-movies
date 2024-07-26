@@ -1,20 +1,33 @@
-import './App.css';
 import Header from './components/header';
 import ResponsiveNavbar from './components/responsiveNavbar';
-import { useState, useEffect } from 'react';
+import Pesquisa from './components/Pesquisa';
+import ListaFilmes from './components/listaFilmes';
+import { useState } from 'react';
+import styled from 'styled-components'
+
+///////////////////// STYLED COMPONENTS /////////////////////
+const AppCointainer = styled.div`
+  width: 100vw;
+  height: 100%;
+  background-image: linear-gradient(90deg, #00243f 35%, #3378a8 165%);
+`
+/////////////////////////////////////////////////////////////
 
 function App() {
   const [isNavbarVisible, setNavbarVisible] = useState(false);
+  const [nameMovie, setNameMovie] = useState("");
 
   const toggleNavbar = () => {
     setNavbarVisible(!isNavbarVisible);
   };
+
   return (
-    <div className='App'>
+    <AppCointainer>
       <Header isNavbarVisible={isNavbarVisible} toggleNavbar={toggleNavbar} setNavbarVisible={setNavbarVisible} />
       {isNavbarVisible && <ResponsiveNavbar isNavbarVisible={isNavbarVisible} />}
-
-    </div>
+      <Pesquisa setNameMovie={setNameMovie} />
+      <ListaFilmes nameMovie={nameMovie} />
+    </AppCointainer>
   );
 }
 

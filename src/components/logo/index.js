@@ -1,11 +1,27 @@
+import styled from 'styled-components'
 import logo from '../../imagens/logo.svg'
-import './estilo.css'
+
+///////////////////// STYLED COMPONENTS /////////////////////
+const LogoContainer = styled.div`
+    display: flex;
+    font-size: 30px;
+    color: #002f52;
+`
+
+const ImagemLogo = styled.img`
+    margin-right: 10px;
+`
+
+const TextoLogo = styled.p`
+    padding-bottom: 7px;
+`
+/////////////////////////////////////////////////////////////
 
 export default function Logo() {
     return (
-        <div className='logo'>
-            <img src={logo} alt='logo'></img>
-            <p><strong>Favs</strong>Movies</p>
-        </div>
+        <LogoContainer>
+            <ImagemLogo src={logo} alt='logo'></ImagemLogo>
+            <TextoLogo><strong>Favs</strong>Movies</TextoLogo>
+        </LogoContainer>
     )
 }

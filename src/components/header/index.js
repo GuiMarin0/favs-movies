@@ -1,9 +1,23 @@
-import './estilo.css'
 import Logo from "../logo"
 import OpcoesHeader from "../opcoesHeader"
 import IconesHeader from "../iconesHeader"
-import ResponsiveNavbar from '../responsiveNavbar'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import styled from 'styled-components';
+
+///////////////////// STYLED COMPONENTS /////////////////////
+const HeaderContainer = styled.header`
+    background-color: #ffffff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+`
+
+const HeaderContent = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 89%;
+`
+/////////////////////////////////////////////////////////////
 
 export default function Header({ isNavbarVisible, toggleNavbar, setNavbarVisible }) {
 
@@ -23,12 +37,12 @@ export default function Header({ isNavbarVisible, toggleNavbar, setNavbarVisible
     }, []);
 
     return (
-        <header className='App-header'>
-            <div className='content content-header'>
+        <HeaderContainer>
+            <HeaderContent>
                 <Logo />
                 <OpcoesHeader />
                 <IconesHeader toggleNavbar={toggleNavbar} isNavbarVisible={isNavbarVisible} />
-            </div>
-        </header>
+            </HeaderContent>
+        </HeaderContainer>
     )
 }

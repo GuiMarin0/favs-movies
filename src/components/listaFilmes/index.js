@@ -1,6 +1,10 @@
 import styled from "styled-components"
 import { API_KEY } from "../../config"
 import { useState, useEffect } from "react"
+import BadSearch from "../badSearch"
+import Loading from "../loading"
+import next from "../../imagens/next.svg"
+import previous from "../../imagens/previous.svg"
 
 ///////////////////// STYLED COMPONENTS /////////////////////
 const Container = styled.div`
@@ -15,6 +19,13 @@ const Content = styled.div`
 
     h1{
         text-align: center;
+        margin: 3rem 0;
+        color: #FFF;
+        text-decoration: underline;
+    }
+
+    h2{
+        text-align: start;
         margin: 3rem 0;
         color: #FFF;
         text-decoration: underline;
@@ -56,46 +67,129 @@ const Movie = styled.li`
     }
 `
 
+const Buttons = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    margin-top: 30px;
+
+    h3{
+        color:#FFF;
+    }
+
+`
+const Button = styled.button`
+    background-color: transparent;
+    border: 0;
+    cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+
+    img:hover{
+        ${({ disabled }) => !disabled && `
+            &:hover {
+                transform: scale(1.1);
+            }
+        `}
+    }
+
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+`
+
 ////////////////////////////////////////////////////////////
 
 export default function ListaFilmes({ nameMovie }) {
 
     const [movies, setMovies] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+
     const image_path = 'https://image.tmdb.org/t/p/w500';
 
     useEffect(() => {
+        setPage(1); // Reinicia a página para 1 quando nameMovie mudar
+    }, [nameMovie]);
+
+    useEffect(() => {
+        setIsLoading(true);
         //consumindo api
         if (nameMovie) {
-            fetch(`https://api.themoviedb.org/3/search/movie?query=${nameMovie}&api_key=${API_KEY}&language=pt-BR`)
+            fetch(`https://api.themoviedb.org/3/search/movie?query=${nameMovie}&api_key=${API_KEY}&language=pt-BR&page=${page}`)
                 .then(response => response.json())
-                .then(data => setMovies(data.results))
+                .then(data => {
+                    setTotalPages(data.total_pages);
+                    setMovies(data.results);
+                    setIsLoading(false);
+                })
         }
         else {
-            fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=pt-BR`)
+            fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=pt-BR&page=${page}`)
                 .then(response => response.json())
-                .then(data => setMovies(data.results))
+                .then(data => {
+                    setTotalPages(data.total_pages);
+                    setMovies(data.results);
+                    setIsLoading(false);
+                })
         }
 
-    }, [nameMovie])
+    }, [nameMovie, page])
+
+    const handlePrevious = () => {
+        if (page > 1) {
+            setPage(prevPage => prevPage - 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const handleNext = () => {
+        setPage(prevPage => prevPage + 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    if (isLoading) {
+        return <Loading />; // Mostra uma mensagem de carregamento enquanto os dados são buscados
+    }
 
     return (
         <Container>
             <Content>
                 {nameMovie === "" ? <h1>Filmes Populares</h1>
-                    : <h1>Resultado para "{nameMovie}"</h1>}
-                <MovieList>
+                    : <h2>Resultado para "{nameMovie}"</h2>}
+                {movies.length !== 0 ? <MovieList>
                     {movies.map(movie => {
                         if (movie.poster_path != null) {
                             return (
                                 <Movie key={movie.id}>
-                                    <a href="#"><img src={`${image_path}${movie.poster_path}`} alt={movie.title} /></a>
+                                    <a href="https://www.google.com.br/"><img src={`${image_path}${movie.poster_path}`} alt={movie.title} /></a>
                                     <span>{movie.title}</span>
                                 </Movie>
                             )
                         }
+                        else {
+                            return null;
+                        }
                     })}
                 </MovieList>
+                    : <BadSearch />}
             </Content>
+            {movies.length > 0
+                &&
+                <Buttons>
+                    <Button
+                        onClick={handlePrevious}
+                        disabled={page <= 1}
+                    ><img img src={previous} alt="previous button" /></Button>
+                    <h3>Pagina {page}</h3>
+                    <Button
+                        onClick={handleNext}
+                        disabled={page === totalPages}
+                    ><img src={next} alt="next button" /></Button>
+                </Buttons>
+            }
+
+
+
         </Container>
     )
 }

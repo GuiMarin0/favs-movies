@@ -34,7 +34,7 @@ export default function Header({ isNavbarVisible, toggleNavbar, setNavbarVisible
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, []);
+    }, [setNavbarVisible]);
 
     return (
         <HeaderContainer>

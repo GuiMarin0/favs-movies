@@ -2,6 +2,7 @@ import Header from './components/header';
 import ResponsiveNavbar from './components/responsiveNavbar';
 import Pesquisa from './components/Pesquisa';
 import ListaFilmes from './components/listaFilmes';
+import FilmesCinema from './components/filmesCinema';
 import { useState } from 'react';
 import styled from 'styled-components'
 
@@ -9,7 +10,6 @@ import styled from 'styled-components'
 const AppCointainer = styled.div`
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(90deg, #00243f 35%, #3378a8 165%);
 `
 /////////////////////////////////////////////////////////////
 
@@ -27,6 +27,7 @@ function App() {
       {isNavbarVisible && <ResponsiveNavbar isNavbarVisible={isNavbarVisible} />}
       <Pesquisa setNameMovie={setNameMovie} />
       <ListaFilmes nameMovie={nameMovie} />
+      <FilmesCinema />
     </AppCointainer>
   );
 }

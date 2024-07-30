@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { API_KEY } from "../../config"
 import { useState, useEffect } from "react"
 import BadSearch from "../badSearch"
@@ -11,6 +11,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: linear-gradient(90deg, #00243f 35%, #3378a8 165%);
 `
 
 const Content = styled.div`
@@ -40,7 +41,7 @@ const MovieList = styled.ul`
     padding-inline-start: 0px;
 `
 
-const Movie = styled.li`
+const commonStyles = css` // usarei como li na lista de filmes e como div no corrosel de filmes no cinema
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,7 +54,7 @@ const Movie = styled.li`
 
     span{
         font-weight: bold;
-        font-size: 120%;
+        font-size: 100%;
         color: #FFF;
         text-align: center;
     }
@@ -66,6 +67,27 @@ const Movie = styled.li`
         transform: scale(1.1);
     }
 `
+
+const MovieListItem = styled.li`
+    ${commonStyles}
+`;
+
+export const MovieDivItem = styled.div`
+    ${commonStyles}
+    margin: 20px 40px 20px 8px;
+    flex: none;
+
+    img{
+        width: 150px;
+        margin-bottom: 1rem;
+    }
+
+    span{
+        color: #002f52;
+        font-size: 15px;
+        width: 150px;
+    }
+`;
 
 const Buttons = styled.div`
     display: flex;
@@ -91,7 +113,6 @@ const Button = styled.button`
             }
         `}
     }
-
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `
 
@@ -156,22 +177,24 @@ export default function ListaFilmes({ nameMovie }) {
             <Content>
                 {nameMovie === "" ? <h1>Filmes Populares</h1>
                     : <h2>Resultado para "{nameMovie}"</h2>}
-                {movies.length !== 0 ? <MovieList>
-                    {movies.map(movie => {
-                        if (movie.poster_path != null) {
-                            return (
-                                <Movie key={movie.id}>
-                                    <a href="https://www.google.com.br/"><img src={`${image_path}${movie.poster_path}`} alt={movie.title} /></a>
-                                    <span>{movie.title}</span>
-                                </Movie>
-                            )
-                        }
-                        else {
-                            return null;
-                        }
-                    })}
-                </MovieList>
-                    : <BadSearch />}
+                {movies.length !== 0 ?
+                    <MovieList>
+                        {movies.map(movie => {
+                            if (movie.poster_path != null) {
+                                return (
+                                    <MovieListItem key={movie.id}>
+                                        <a href="https://www.google.com.br/"><img src={`${image_path}${movie.poster_path}`} alt={movie.title} /></a>
+                                        <span>{movie.title}</span>
+                                    </MovieListItem>
+                                )
+                            }
+                            else {
+                                return null;
+                            }
+                        })}
+                    </MovieList>
+                    :
+                    <BadSearch />}
             </Content>
             {movies.length > 0
                 &&

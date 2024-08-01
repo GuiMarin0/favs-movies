@@ -3,6 +3,7 @@ import ResponsiveNavbar from './components/responsiveNavbar';
 import Pesquisa from './components/Pesquisa';
 import ListaFilmes from './components/listaFilmes';
 import FilmesCinema from './components/filmesCinema';
+import Footer from './components/footer';
 import { useState } from 'react';
 import styled from 'styled-components'
 
@@ -28,6 +29,7 @@ function App() {
       <Pesquisa setNameMovie={setNameMovie} />
       <ListaFilmes nameMovie={nameMovie} />
       <FilmesCinema />
+      <Footer />
     </AppCointainer>
   );
 }

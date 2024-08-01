@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import bad_reques_movie from "../../imagens/bad_request_movie2.svg"
+import bad_request_movie from "../../imagens/bad_request_movie2.svg"
 
 ///////////////////// STYLED COMPONENTS /////////////////////
 const Container = styled.div`
@@ -27,7 +27,7 @@ export default function BadSearch() {
     return (
         <Container>
             <Content>
-                <img src={bad_reques_movie} alt="nenhum filme encontrado" />
+                <img src={bad_request_movie} alt="nenhum filme encontrado" />
                 <h3>Nenhum filme encontrado, nos desculpe!</h3>
             </Content>
         </Container>

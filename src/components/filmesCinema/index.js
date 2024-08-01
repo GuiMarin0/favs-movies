@@ -12,6 +12,7 @@ const Container = styled.div`
     align-items: center;
     background-color: #e1e1e1;
     justify-content: center;
+    padding-bottom: 10px;
 `
 
 const Content = styled.div`

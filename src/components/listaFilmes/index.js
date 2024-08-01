@@ -33,6 +33,36 @@ const Content = styled.div`
     }
 `
 
+const Selector = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 191px;
+    border: 2px solid #FFF;
+    border-radius: 100px;
+    margin-bottom: 30px;
+`
+
+const SelectOptions = styled.div`
+    border-radius: 100px;
+    cursor: pointer;
+    
+    h4{
+        font-size: 12px;
+        border-radius: 100px;
+        margin: 0 auto;
+        padding:5px 15px 5px 15px ;
+        color: #FFF;
+    }
+
+    &.selected{
+        h4{
+            color: #fc7122;
+        }
+        background-color: #FFF;
+        
+    }
+`
+
 const MovieList = styled.ul`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -124,13 +154,18 @@ export default function ListaFilmes({ nameMovie }) {
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-
+    const [selectedOption, setSelectedOption] = useState('hoje');
 
     const image_path = 'https://image.tmdb.org/t/p/w500';
 
     useEffect(() => {
         setPage(1); // Reinicia a página para 1 quando nameMovie mudar
     }, [nameMovie]);
+
+    useEffect(() => {
+        setPage(1);// Reinicia a página para 1 quando selectedOption mudar
+        window.scrollTo({ top: 1, behavior: 'smooth' });
+    }, [selectedOption])
 
     useEffect(() => {
         setIsLoading(true);
@@ -145,7 +180,11 @@ export default function ListaFilmes({ nameMovie }) {
                 })
         }
         else {
-            fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=pt-BR&page=${page}`)
+            let url = selectedOption === 'hoje'
+                ? 'https://api.themoviedb.org/3/movie/popular'
+                : 'https://api.themoviedb.org/3/movie/top_rated';
+
+            fetch(`${url}?api_key=${API_KEY}&language=pt-BR&page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     setTotalPages(data.total_pages);
@@ -154,7 +193,7 @@ export default function ListaFilmes({ nameMovie }) {
                 })
         }
 
-    }, [nameMovie, page])
+    }, [nameMovie, page, selectedOption])
 
     const handlePrevious = () => {
         if (page > 1) {
@@ -177,6 +216,22 @@ export default function ListaFilmes({ nameMovie }) {
             <Content>
                 {nameMovie === "" ? <h1>Filmes Populares</h1>
                     : <h2>Resultado para "{nameMovie}"</h2>}
+                {nameMovie === "" &&
+                    <Selector>
+                        <SelectOptions
+                            className={selectedOption === 'hoje' ? 'selected' : ''}
+                            onClick={() => setSelectedOption('hoje')}
+                        >
+                            <h4>Hoje</h4>
+                        </SelectOptions>
+                        <SelectOptions
+                            className={selectedOption === 'todosOsTempos' ? 'selected' : ''}
+                            onClick={() => setSelectedOption('todosOsTempos')}
+                        >
+                            <h4>Todos os Tempos</h4>
+                        </SelectOptions>
+                    </Selector>
+                }
                 {movies.length !== 0 ?
                     <MovieList>
                         {movies.map(movie => {

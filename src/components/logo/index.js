@@ -5,7 +5,7 @@ import logo from '../../imagens/logo.svg'
 const LogoContainer = styled.div`
     display: flex;
     font-size: 30px;
-    color: #002f52;
+    color: ${props => props.cor};
 `
 
 const ImagemLogo = styled.img`
@@ -17,9 +17,9 @@ const TextoLogo = styled.p`
 `
 /////////////////////////////////////////////////////////////
 
-export default function Logo() {
+export default function Logo({ cor = '#002f52' }) {
     return (
-        <LogoContainer>
+        <LogoContainer cor={cor}>
             <ImagemLogo src={logo} alt='logo'></ImagemLogo>
             <TextoLogo><strong>Favs</strong>Movies</TextoLogo>
         </LogoContainer>
